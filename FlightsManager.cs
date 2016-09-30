@@ -10,12 +10,9 @@ namespace Airport
 {
     public class FlightsManager
     {
-
-
         public const string DatePattern = "dd.MM.yyyy HH:mm";
 
         private List<FlightInfo> flights;
-
 
         public FlightsManager()
         {
@@ -61,6 +58,7 @@ namespace Airport
                 null
             };
         }
+
         public void Create()
         {
             Console.Clear();
@@ -102,6 +100,7 @@ namespace Airport
                     break;
             }
         }
+
         public void Edit()
         {
             Console.Clear();
@@ -180,6 +179,7 @@ namespace Airport
             IOHelper.DrawConsoleHeader("Changes have been made, press any key to continue", ConsoleColor.Green);
             Console.ReadLine();
         }
+
         public void Remove()
         {
             Console.WriteLine(@"Do you want to remove flights? Y\N");
@@ -197,7 +197,6 @@ namespace Airport
                     Console.WriteLine("Enter the number of flight to delete");
                     string num = Console.ReadLine();
 
-
                     foreach (var item in flights)
                     {
                         if (item != null && item.Number == num)
@@ -213,6 +212,7 @@ namespace Airport
                     break;
             }
         }
+
         public void Search(string number, DateTime? arrival, string destination, string depPlace, bool isLastTime = false)
         {
             Console.Clear();
@@ -242,7 +242,6 @@ namespace Airport
                     fc.Add(item);
                     break;
                 }
-
                 else if (item != null && isLastTime &&
                      ((item.Arrival <= dateNow.AddHours(1) && item.Arrival >= dateNow)
                      || (item.Departure <= dateNow.AddHours(1) && item.Departure >= dateNow)))
@@ -256,9 +255,6 @@ namespace Airport
                 IOHelper.DrawConsoleHeader("Sorry, flights were not found", ConsoleColor.Red);
             else
                 Draw(fc);
-
-           // IOHelper.DrawConsoleHeader("Press any key to continue", ConsoleColor.Green);
-           // Console.ReadLine();
         }
 
         public void Draw()
@@ -282,7 +278,6 @@ namespace Airport
 
                 fl.Add(new List<string> { flight.Number, flight.Destination, flight.DeparturePlace, flight.AirLine, flight.Departure.ToString(), flight.Arrival.ToString(), flight.Gate, flight.Status.ToString(), prices });
             }
-
             IOHelper.DrawInformation(new[] { "Number", "Destination", "Departure", "AirLine", "Departure time", "Arrival time", "Gate", "Status", "FlightPrices" }, fl);
         }
 
@@ -350,7 +345,6 @@ namespace Airport
                     isFind = true;
                     break;
                 }
-
             }
             IOHelper.DrawConsoleHeader(string.Format("{0} press any key to continue...", !isFind ? "Sorry, but the passenger does not exist" : "User was deleted"), !isFind ? ConsoleColor.Red : ConsoleColor.Green);
             Console.ReadLine();
@@ -367,9 +361,11 @@ namespace Airport
                 if (flight == null) return;
 
                 Console.WriteLine("Please, enter the first name of the passenger to edit");
+                
                 string firstName = Console.ReadLine();
 
                 Console.WriteLine("Please, enter the second name of the passenger to edit");
+                
                 string secondName = Console.ReadLine();
 
                 Passenger passenger = null;
@@ -431,7 +427,6 @@ namespace Airport
                 IOHelper.DrawConsoleHeader("Changes have been made, press any key to continue", ConsoleColor.Green);
                 Console.ReadLine();
             }
-
             catch
             {
                 IOHelper.DrawConsoleHeader("Data format was incorrect to press any key to continue", ConsoleColor.Red);
@@ -442,31 +437,39 @@ namespace Airport
         public void SearchPassenger()
         {
             Console.Clear();
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             Console.WriteLine("Enter the first name of passenger");
+            
             string firstName = Console.ReadLine();
+            
             Console.WriteLine("Enter the second name of passenger");
+            
             string secondName = Console.ReadLine();
 
-
             List<List<string>> pass = new List<List<string>>();
+
             foreach (var item in flights)
             {
                 if (item == null) continue;
+                
                 foreach (var pas in item.Passengers)
                 {
                     if (pas.FirstName == firstName && pas.SecondName == secondName)
                     {
                         pass.Add(new List<string> { item.Number, pas.FirstName, pas.SecondName, pas.Nationality, pas.Pasport, pas.Birthday.ToShortDateString(), pas.Gender.ToString(), pas.ClassType.ToString() });
                     }
-                    
                 }
             }
+
             if (pass.Count == 0)
             {
                 IOHelper.DrawConsoleHeader("We could not find a passenger, do you want to continue? Press any button", ConsoleColor.Red);
                 Console.ReadLine();
                 return;
             }
+            
             IOHelper.DrawInformation(new[] { "FlightNumber", "FirstName", "SecondName", "Nationality", "Pasport", "Birthday", "Gender", "ClassType" }, pass);
             IOHelper.DrawConsoleHeader("Press any key to continue", ConsoleColor.Green);
             Console.ReadLine();
@@ -489,9 +492,11 @@ namespace Airport
         public void DrawPass()
         {
             Console.Clear();
+            
             FlightInfo flight = SearchByNumber();
 
             DrawPassenger(flight.Passengers);
+           
             Console.WriteLine("Press any key to continue...");
             Console.ReadLine();
         }
@@ -500,8 +505,10 @@ namespace Airport
 
         private FlightInfo SearchByNumber()
         {
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.WriteLine("Enter the number of flight");
+            
             string numFl = Console.ReadLine();
 
             FlightInfo flightPas = null;
@@ -523,6 +530,7 @@ namespace Airport
             }
 
             IOHelper.DrawConsoleHeader(string.Format("Flight: {0} has been found", numFl), ConsoleColor.Green);
+            
             Draw(new List<FlightInfo> { flightPas });
 
             return flightPas;
@@ -531,7 +539,9 @@ namespace Airport
         private void AddPrices(FlightInfo flight)
         {
             Console.WriteLine("You can add these types {0}", string.Join(" or ", Enum.GetNames(typeof(FlightClasses))));
+            
             string answer = string.Empty;
+            
             do
             {
                 var price = new FlightPrice();
@@ -555,10 +565,8 @@ namespace Airport
                 flight.FlightPrices.Add(price);
                 Console.WriteLine("Do you want to continue? Y/N");
                 answer = Console.ReadLine();
-
             }
             while (answer.ToUpper() == "Y");
         }
     }
-
 }

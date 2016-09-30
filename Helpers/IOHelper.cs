@@ -12,16 +12,20 @@ namespace Airport.Helpers
         public static string SetStringValue(string message)
         {
             Console.WriteLine("Please enter the {0}", message);
+            
             var str = string.Empty;
+            
             do
             {
                 str = Console.ReadLine();
+                
                 if (string.IsNullOrEmpty(str))
                 {
                     DrawConsoleHeader(string.Format("{0} can't be empty", message).ToUpper(), ConsoleColor.Red);
                 }
             }
             while (string.IsNullOrEmpty(str));
+            
             return str;
         }
 
@@ -104,7 +108,5 @@ namespace Airport.Helpers
 
             ct.PrintTable();
         }
-
-
     }
 }

@@ -17,7 +17,6 @@ namespace Airport
         public DateTime Arrival { get; set; }
         public string Gate { get; set; }
         public FlightStatus Status { get; set; }
-
         public List<Passenger> Passengers { get; set; }
         public List<FlightPrice> FlightPrices { get; set; }
 

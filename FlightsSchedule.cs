@@ -13,6 +13,7 @@ namespace Airport
         public const string DatePattern = "dd.MM.yyyy HH:mm";
         
         private FlightsManager flightsManager;
+
         public FlightsSchedule()
         {
             flightsManager = new FlightsManager();
@@ -39,7 +40,6 @@ namespace Airport
 
         internal void EditFlight()
         {
-
             try
             {
                 flightsManager.Edit();
@@ -107,6 +107,7 @@ namespace Airport
             {
                 IOHelper.DrawConsoleHeader("Data format was incorrect ", ConsoleColor.Red);
             }
+            
             IOHelper.DrawConsoleHeader("The passenger was added, press any key to continue", ConsoleColor.Green);
             Console.ReadLine();
         }

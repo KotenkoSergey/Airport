@@ -17,6 +17,4 @@ namespace Airport
             return string.Format("{0} {1}", this.Type, this.Cost);
         }
     }
-
-
 }

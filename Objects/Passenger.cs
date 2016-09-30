@@ -16,6 +16,5 @@ namespace Airport
         public DateTime Birthday { get; set; }
         public Gender Gender { get; set; }
         public FlightClasses ClassType { get; set; }
-
     }
 }

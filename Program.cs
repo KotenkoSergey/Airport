@@ -17,9 +17,7 @@ namespace Airport
 
                 var menu = new Menu();
 
-                var key = menu.DrawMenu();
-
-                menu.Execute(key);
+                menu.Execute();
             }
             catch (Exception e)
             {

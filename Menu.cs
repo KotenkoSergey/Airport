@@ -28,7 +28,6 @@ namespace Airport
 
                 schedule.DrawFlights();
                 
-
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 Console.WriteLine("Select operation:");
@@ -40,6 +39,7 @@ namespace Airport
                 Console.WriteLine("[5] Exit.");                      
                 
                 option = Console.ReadLine();
+
                 Console.ResetColor();
             }
             catch 
@@ -49,142 +49,168 @@ namespace Airport
             return option;
         }
 
-        public void Execute(string key)
+        public void Execute()
         {
+            var key = string.Empty;
+
             Console.Clear();
 
-            switch (key)
+            do
             {
-                case "1":
-                    ModifyFlightsMenu(key);
-                    break;
-                case "2":
-                    FilterFlightsMenu(key);
-                    break;
-                case "3":
-                    schedule.SearchFlightByTime();
-                    Execute(DrawMenu());
-                    break;
-                case "4":
-                    FilterPassengerMenu(key);
-                    break;
-                default:                
-                     break;
+                key = DrawMenu();
+
+                switch (key)
+                {
+                    case "1":
+                        ModifyFlightsMenu();
+                        break;
+                    case "2":
+                        FilterFlightsMenu();
+                        break;
+                    case "3":
+                        schedule.SearchFlightByTime();
+                        break;
+                    case "4":
+                        FilterPassengerMenu();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            while (key != "5");
+        }
+
+        public void ModifyFlightsMenu()
+        {
+            var key = string.Empty;
+
+            while (key != "4")
+            {
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine("\nSelect any option:");
+                Console.WriteLine();
+                Console.WriteLine("[1] Add flight");
+                Console.WriteLine("[2] Edit flight");
+                Console.WriteLine("[3] Delete flight");
+                Console.WriteLine("[4] Exit");
+
+                key = Console.ReadLine();
+
+                switch (key)
+                {
+                    case "1":
+                        schedule.AddFlight();                        
+                        break;
+                    case "2":
+                        schedule.EditFlight();                        
+                        break;
+                    case "3":
+                        schedule.RemoveFlight();                      
+                        break;
+                    default:
+                        key = "4";                       
+                        break;
+                }
             }
         }
 
-        public void ModifyFlightsMenu(string key)
+        public void FilterFlightsMenu()
         {
-            Console.WriteLine("\nSelect any option:");
-            Console.WriteLine("[1] Add flight");
-            Console.WriteLine("[2] Edit flight");
-            Console.WriteLine("[3] Delete flight");
-            Console.WriteLine("[4] Exit");
-
-            var option = Console.ReadLine();
-
-            switch (option)
+            var key = string.Empty;
+            
+            while (key != "5")
             {
-                case "1":
-                    schedule.AddFlight();
-                    Execute(key);
-                    break;
-                case "2":
-                    schedule.EditFlight();
-                    Execute(key);
-                    break;
-                case "3":
-                    schedule.RemoveFlight();
-                    Execute(key);
-                    break;
-                default:
-                    Execute(DrawMenu());
-                    break;
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine("\nSelect any option:");
+                Console.WriteLine();
+                Console.WriteLine("[1] Search by the flight number");
+                Console.WriteLine("[2] Search by arrival time");
+                Console.WriteLine("[3] Search by destination");
+                Console.WriteLine("[4] Search by departure place");
+                Console.WriteLine("[5] Exit");
+
+                key = Console.ReadLine();
+
+                Console.Clear();
+
+                switch (key)
+                {
+                    case "1":
+                        Console.WriteLine("Enter the number of flight to search");
+                        string strNum = Console.ReadLine();
+                        schedule.SearchFlight(strNum, null, null, null);                        
+                        break;
+                    case "2":
+                        var strTime = IOHelper.SetDate("Please enter new the departure date and time to search (use this format dd.MM.yyyy HH:mm )", FlightsSchedule.DatePattern, true);
+                        schedule.SearchFlight(null, strTime, null, null);
+                       
+                        break;
+                    case "3":
+                        Console.WriteLine("Enter the destination of flight to search");
+                        string strDest = Console.ReadLine();
+                        schedule.SearchFlight(null, null, strDest, null);                      
+                        break;
+                    case "4":
+                        Console.WriteLine("Enter the departure place of flight to search");
+                        string strDepPlace = Console.ReadLine();
+                        schedule.SearchFlight(null, null, null, strDepPlace);                        
+                        break;
+                    default:
+                        key = "5"; // for interrupting 
+                        break;
+                }
             }
         }
 
-        public void FilterFlightsMenu(string key)
+        public void FilterPassengerMenu() 
         {
-            Console.WriteLine("\nSelect any option:");
-            Console.WriteLine("[1] Search by the flight number");
-            Console.WriteLine("[2] Search by arrival time");
-            Console.WriteLine("[3] Search by destination");
-            Console.WriteLine("[4] Search by departure place");
-            Console.WriteLine("[5] Exit");
+             var key = string.Empty;
 
-            var answer = Console.ReadLine();
+             while (key != "6")
+             {
+                 Console.Clear();
 
-            Console.Clear();
-            switch (answer)
-            {
-                case "1":
-                    Console.WriteLine("Enter the number of flight to search");
-                    string strNum = Console.ReadLine();
+                 Console.ForegroundColor = ConsoleColor.Yellow;
 
-                    schedule.SearchFlight(strNum, null, null, null);
-                    Execute(key);
-                    break;
-                case "2":
-                    var strTime = IOHelper.SetDate("Please enter new the departure date and time to search (use this format dd.MM.yyyy HH:mm )", FlightsSchedule.DatePattern, true);
-                    schedule.SearchFlight(null, strTime, null, null);
-                    Execute(key);
-                    break;
-                case "3":
-                    Console.WriteLine("Enter the destination of flight to search");
-                    string strDest = Console.ReadLine();
-                    schedule.SearchFlight(null, null, strDest, null);
-                    Execute(key);
-                    break;
-                case "4":
-                    Console.WriteLine("Enter the departure place of flight to search");
-                    string strDepPlace = Console.ReadLine();
-                    schedule.SearchFlight(null, null, null, strDepPlace);
-                    Execute(key);
-                    break;
-                case "5":
-                    Execute(DrawMenu());
-                    break;
-            }
-        }
+                 Console.WriteLine("\nSelect any option:");
+                 Console.WriteLine();
+                 Console.WriteLine("[1] Display passenger");
+                 Console.WriteLine("[2] Add passenger");
+                 Console.WriteLine("[3] Edit passenger");
+                 Console.WriteLine("[4] Delete passenger");
+                 Console.WriteLine("[5] Search passenger");
+                 Console.WriteLine("[6] Exit");
 
-        public void FilterPassengerMenu(string key) 
-        {
-            Console.WriteLine("\nSelect any option:");
-            Console.WriteLine("[1] Display passenger");
-            Console.WriteLine("[2] Add passenger");
-            Console.WriteLine("[3] Edit passenger");
-            Console.WriteLine("[4] Delete passenger");
-            Console.WriteLine("[5] Search passenger");
-            Console.WriteLine("[6] Exit");
+                 key = Console.ReadLine();
 
-            var option = Console.ReadLine();
-
-            switch (option)
-            { 
-                case "1":
-                    schedule.DrawPassenger();
-                    Execute(key);
-                    break;
-                case "2":
-                    schedule.AddPassenger();
-                    Execute(key);
-                    break;
-                case "3":
-                    schedule.EditPassenger();
-                    Execute(key);
-                    break;
-                case "4":
-                    schedule.RemovePasssenger();
-                    Execute(key);
-                    break;
-                case "5":
-                    schedule.SearchPassenger();
-                    Execute(key);
-                    break;
-                default:
-                    Execute(DrawMenu());
-                    break;
-            }
+                 switch (key)
+                 {
+                     case "1":
+                         schedule.DrawPassenger();                        
+                         break;
+                     case "2":
+                         schedule.AddPassenger();                       
+                         break;
+                     case "3":
+                         schedule.EditPassenger();                        
+                         break;
+                     case "4":
+                         schedule.RemovePasssenger();                         
+                         break;
+                     case "5":
+                         schedule.SearchPassenger();                  
+                         break;
+                     default:
+                         key = "6";                         
+                         break;
+                 }
+             }
         }
     }
 }

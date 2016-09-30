@@ -45,7 +45,7 @@
     <Compile Include="Enums\FlightClasses.cs" />
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="FlightsManager.cs" />
-    <Compile Include="Objects\Flight.cs" />
+    <Compile Include="Objects\FlightInfo.cs" />
     <Compile Include="FlightsSchedule.cs" />
     <Compile Include="Enums\FlightStatus.cs" />
     <Compile Include="Helpers\IOHelper.cs" />

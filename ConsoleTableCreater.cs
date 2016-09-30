@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Airport.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,7 +63,6 @@ namespace Airport
 
         private void AppendLine(StringBuilder hsb, int length)
         {
-
             hsb.Append(" ");
             hsb.Append(new string('-', length - 4));
             hsb.Append("\r\n");
@@ -76,7 +76,6 @@ namespace Airport
         /// </summary>
         private int GetMaxRowLength()
         {
-
             if (header != null)
                 return header.Length;
             else
@@ -85,13 +84,10 @@ namespace Airport
 
                 for (var i = 1; i < rows.Count; i++)
                 {
-
                     if (rows[i].Count > maxlen) maxlen = rows[i].Count;
                 }
-
                 return maxlen;
             }
-
         }
         
         private void PutDefaultElementAndRemoveExtra()
@@ -103,41 +99,31 @@ namespace Airport
                 // If we find a line that is smaller than the biggest line,
                 // we'll add DefaultElement at the end of that line. In the end
                 // the line will be as big as the biggest line.
-
+               
                 if (t.Count < maxlen)
                 {
-
                     var loops = maxlen - t.Count;
                     for (var k = 0; k < loops; k++) t.Add(DefaultElement);
-
                 }
                 else if (t.Count > maxlen)
                 {
-
                     // This will apply only when header != null, and we try to
                     // add a line bigger than the header line. Remove the elements
                     // of the line, from right to left, until the line is equal
                     // with the header line.
 
                     t.RemoveRange(maxlen, t.Count - maxlen);
-
                 }
 
-                // Find bad data, loop through all table elements.
-
                 for (var j = 0; j < t.Count; j++)
-
                 {
-
                     if (t[j] == null)
                         t[j] = DefaultElement;
                     else if (t[j] == "")
                         t[j] = DefaultElement;
-
                 }
             }
         }
-
 
         /// <summary>
         /// This function will return an array of integers, an element at
@@ -146,7 +132,6 @@ namespace Airport
         /// </summary>
         private int[] GetWidths()
         {
-
             int[] widths = null;
 
             if (header != null)
@@ -158,11 +143,9 @@ namespace Airport
 
                 for (int i = 0; i < header.Length; i++)
                     widths[i] = header[i].ToString().Length;
-
             }
             else
             {
-
                 var count = GetMaxRowLength();
 
                 widths = new int[count];
@@ -176,15 +159,11 @@ namespace Airport
                 for (int i = 0; i < s.Count; i++)
                 {
                     s[i] = s[i].Trim();
-
                     if (s[i].Length > widths[i]) widths[i] = s[i].Length;
                 }
             }
-
             return widths;
         }
-
-
 
         /// <summary>
         /// Returns a valid format that is to be passed to AppendFormat
@@ -197,14 +176,10 @@ namespace Airport
 
             for (int i = 0; i < widths.Length; i++)
             {
-
                 if (TextAlignment == AlignText.ALIGN_LEFT)
                     rowFormat += "|{" + i.ToString() + ",-" + (widths[i] + 2) + "}";
-
                 else
                     rowFormat += "|{" + i.ToString() + "," + (widths[i] + 2) + "}";
-                //{0,7}
-
             }
 
             rowFormat = rowFormat.Insert(rowFormat.Length, "|\r\n");
@@ -216,13 +191,14 @@ namespace Airport
         /// </summary>
         public void PrintTable()
         {
-
             if (rows.Count == 0)
             {
-                Console.WriteLine("Can't create a table without any rows.");
+
+                IOHelper.DrawConsoleHeader("Can't create a table without any rows.", ConsoleColor.Red);
+                Console.WriteLine();
+                
                 return;
             }
-
 
             PutDefaultElementAndRemoveExtra();
 
@@ -230,9 +206,7 @@ namespace Airport
 
             var rowFormat = BuildRowFormat(widths);
 
-
             // I'm using a temporary string builder to find the total width
-
             // of the table, and increase BufferWidth of Console if necessary.
 
             StringBuilder toFindLen = new StringBuilder();
@@ -245,7 +219,6 @@ namespace Airport
                 Console.BufferWidth = length;
 
             // Print the first row, or header (if it exist), you can see that AppendLine
-
             // is called before/after every AppendFormat.
 
             StringBuilder hsb = new StringBuilder();
@@ -257,7 +230,6 @@ namespace Airport
             AppendLine(hsb, length);
 
             // If header does't exist, we start from 1 because the first row
-
             // was already printed above.
 
             var idx = 0;
@@ -267,11 +239,9 @@ namespace Airport
 
             for (int i = idx; i < rows.Count; i++)
             {
-
                 hsb.AppendFormat(rowFormat, rows[i].ToArray());
                 AppendLine(hsb, length);
             }
-
             Console.WriteLine(hsb.ToString());
         }
     }
